@@ -479,10 +479,8 @@ img {
     color: var(--c-primary);
 }
 
-/* 5. Enterprise Navbar */
+/* 5. Enterprise Navbar — sticky فقط من الديسكتوب (على الموبايل داخل .site-header الثابت) */
 .navbar {
-    position: sticky;
-    top: 0;
     width: 100%;
     z-index: 1000;
     background: rgba(var(--c-base-rgb), 0.9);
@@ -490,6 +488,13 @@ img {
     -webkit-backdrop-filter: blur(14px) saturate(1.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     transition: all var(--trans-base);
+}
+
+@media screen and (min-width: 769px) {
+    .navbar {
+        position: sticky;
+        top: 0;
+    }
 }
 
 .navbar.scrolled {
@@ -1251,23 +1256,29 @@ img {
         padding: 0 1.125rem;
     }
 
-    /* غلاف واحد ثابت: الشريط العلوي + النافبار (لا تعارض top بين طبقتين) */
+    /* غلاف واحد ثابت: الشريط + النافبار يبقون أعلى الشاشة ولا يتحركان مع السكرول */
     .site-header {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1002;
-        width: 100%;
-        max-width: 100%;
+        display: flex !important;
+        flex-direction: column;
+        align-items: stretch;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: auto !important;
+        z-index: 10050;
+        width: 100% !important;
+        max-width: 100% !important;
         box-sizing: border-box;
         padding-top: env(safe-area-inset-top, 0px);
         padding-left: env(safe-area-inset-left, 0px);
         padding-right: env(safe-area-inset-right, 0px);
+        margin: 0;
         background: var(--c-bg-base);
         border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
 
     .site-header .topbar {
@@ -1318,12 +1329,13 @@ img {
     }
 
     .site-header .navbar {
-        position: relative;
-        top: auto;
-        left: auto;
-        right: auto;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
         width: 100%;
         z-index: 2;
+        flex-shrink: 0;
     }
 
     .nav-container {
