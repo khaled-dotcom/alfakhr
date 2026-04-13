@@ -77,6 +77,8 @@ html {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* overflow-x هنا وليس على body — يمنع قصّ position:fixed على iOS/Safari */
+    overflow-x: hidden;
 }
 
 body.dark-theme {
@@ -84,7 +86,13 @@ body.dark-theme {
     background-color: var(--c-bg-base);
     color: var(--c-text-p);
     line-height: 1.7;
-    overflow-x: hidden;
+    overflow-x: clip;
+    overflow-y: auto;
+}
+
+main#main-content {
+    display: block;
+    min-height: 0;
 }
 
 body.is-loading {
@@ -428,7 +436,11 @@ img {
     font-size: 1.2rem;
 }
 
-/* 4. Top Bar */
+/* 4. Top Bar + site header wrapper (على الديسكتوب: لا صندوق — يحافظ على sticky للنافبار) */
+.site-header {
+    display: contents;
+}
+
 .topbar {
     background: var(--c-bg-surface);
     border-bottom: var(--border-subtle);
@@ -1226,11 +1238,8 @@ img {
 
 @media screen and (max-width: 768px) {
     :root {
-        /* ارتفاع الشريط العلوي = منطقة النوتش + صف واحد للاتصال */
-        --mobile-topbar-height: calc(env(safe-area-inset-top, 0px) + 2.5rem);
-        /* تعويض الهيرو: يغطي الشريط + أقصى ارتفاع متوقع للهيدر */
-        --mobile-navbar-height: 72px;
-        --mobile-header-offset: calc(var(--mobile-topbar-height) + var(--mobile-navbar-height));
+        /* تعويض المحتوى تحت الهيدر الثابت (آمن للنوتش + صفّين مضغوطين) */
+        --mobile-header-offset: calc(env(safe-area-inset-top, 0px) + 9rem);
         --brand-logo-box: var(--brand-logo-box-mobile);
     }
 
@@ -1242,33 +1251,50 @@ img {
         padding: 0 1.125rem;
     }
 
-    /* شريط الاتصال العلوي: ظاهر ومثبت فوق النافبار (موبايل) */
-    .topbar {
+    /* غلاف واحد ثابت: الشريط العلوي + النافبار (لا تعارض top بين طبقتين) */
+    .site-header {
+        display: block;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        z-index: 1001;
+        z-index: 1002;
+        width: 100%;
+        max-width: 100%;
         box-sizing: border-box;
-        min-height: var(--mobile-topbar-height);
-        padding: env(safe-area-inset-top, 0px) 0 0.35rem;
-        font-size: 0.72rem;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+        background: var(--c-bg-base);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .site-header .topbar {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        z-index: 1;
+        min-height: 0;
+        padding: 0.3rem 0;
+        font-size: 0.7rem;
         display: flex;
         align-items: center;
     }
 
     .topbar .container.topbar-inner {
         width: 100%;
+        max-width: 100%;
     }
 
     .topbar-inner {
         flex-wrap: nowrap;
-        gap: 0.75rem;
+        gap: 0.65rem;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        mask-image: linear-gradient(to left, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
     }
 
     .topbar-inner::-webkit-scrollbar {
@@ -1278,7 +1304,7 @@ img {
     .topbar-contact {
         flex: 1 1 auto;
         min-width: 0;
-        gap: 0.85rem;
+        gap: 0.75rem;
         flex-wrap: nowrap;
     }
 
@@ -1291,49 +1317,46 @@ img {
         flex-shrink: 0;
     }
 
-    /* النافبار ثابت تحت الشريط العلوي (sticky يتعطل مع overflow-x على body) */
-    .navbar {
-        position: fixed;
-        top: var(--mobile-topbar-height);
-        left: 0;
-        right: 0;
+    .site-header .navbar {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
         width: 100%;
+        z-index: 2;
     }
 
     .nav-container {
-        min-height: 56px;
+        min-height: 52px;
         height: auto;
-        padding: 0.35rem 0;
+        padding: 0.3rem 0;
         box-sizing: border-box;
     }
 
-    /* ارتفاع الهيدر ثابت تقريبياً على الموبايل — لا قفز للشعار */
     .navbar.scrolled .nav-container {
-        min-height: 56px;
+        min-height: 52px;
         height: auto;
-        padding: 0.35rem 0;
+        padding: 0.3rem 0;
     }
 
     .navbar.scrolled {
         padding: 0;
     }
 
-    .brand-title {
-        font-size: 1.05rem;
-        line-height: 1.25;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
+    /* صف واحد للعلامة — أقل ارتفاع وأقل قص على الشاشة */
+    .brand-subtitle {
+        display: none;
     }
 
-    .brand-subtitle {
-        font-size: 0.62rem;
-        line-height: 1.3;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
+    .brand-title {
+        font-size: 1.05rem;
+        line-height: 1.2;
+        white-space: nowrap;
         overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: unset;
+        display: block;
     }
 
     .brand-img-wrap,

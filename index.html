@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Oswald:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
         rel="stylesheet">
 
     <!-- Font Awesome -->
@@ -44,57 +44,58 @@
         </div>
     </div>
 
-    <!-- Top Bar -->
-    <div class="topbar">
-        <div class="container topbar-inner">
-            <div class="topbar-contact">
-                <span><i class="fas fa-phone-alt"></i> <span
-                        style="direction:ltr; display:inline-block">01098000979</span></span>
-                <span><i class="fas fa-envelope"></i> support@alfakhr-egy.com</span>
-                <span><i class="fas fa-map-marker-alt"></i> الإسكندرية، سبا باشا</span>
-            </div>
-            <div class="topbar-social">
-                <a href="https://www.facebook.com/www.AlfakhrGroup" target="_blank"><i
-                        class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
+    <!-- Top bar + navbar: على الموبايل يُثبَّتان معاً داخل .site-header -->
+    <div class="site-header">
+        <div class="topbar">
+            <div class="container topbar-inner">
+                <div class="topbar-contact">
+                    <span><i class="fas fa-phone-alt"></i> <span
+                            style="direction:ltr; display:inline-block">01098000979</span></span>
+                    <span><i class="fas fa-envelope"></i> support@alfakhr-egy.com</span>
+                    <span><i class="fas fa-map-marker-alt"></i> الإسكندرية، سبا باشا</span>
+                </div>
+                <div class="topbar-social">
+                    <a href="https://www.facebook.com/www.AlfakhrGroup" target="_blank" rel="noopener noreferrer"
+                        aria-label="فيسبوك - مجموعة الفخر"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="لينكد إن (قريباً)"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="تويتر (قريباً)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                </div>
             </div>
         </div>
+
+        <header class="navbar" id="navbar">
+            <div class="container nav-container">
+                <a href="#home" class="brand-logo">
+                    <div class="brand-img-wrap">
+                        <img src="logo.jpg" alt="شعار شركة الفخر">
+                    </div>
+                    <div class="brand-text">
+                        <h1 class="brand-title">الفخر جروب</h1>
+                        <span class="brand-subtitle">للخدمات البترولية والبيئية والصناعية</span>
+                    </div>
+                </a>
+
+                <nav class="main-nav" id="main-navigation" aria-label="التنقل الرئيسي">
+                    <ul class="nav-links">
+                        <li><a href="#home" class="active">الرئيسية</a></li>
+                        <li><a href="#about">من نحن</a></li>
+                        <li><a href="#services">الخدمات</a></li>
+                        <li><a href="#projects">مشاريعنا</a></li>
+                        <li><a href="#contact">الاتصال</a></li>
+                    </ul>
+                </nav>
+
+                <a href="#contact" class="btn btn-outline btn-sm nav-cta">طلب استشارة</a>
+
+                <button type="button" class="menu-toggle" id="menu-toggle" aria-label="فتح وإغلاق القائمة"
+                    aria-expanded="false" aria-controls="main-navigation">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </header>
     </div>
-
-    <!-- Header / Navbar -->
-    <header class="navbar" id="navbar">
-        <div class="container nav-container">
-            <a href="#" class="brand-logo">
-                <div class="brand-img-wrap">
-                    <img src="logo.jpg" alt="شعار شركة الفخر">
-                </div>
-                <div class="brand-text">
-                    <h1 class="brand-title">الفخر جروب</h1>
-                    <span class="brand-subtitle">للخدمات البترولية والبيئية والصناعية</span>
-                </div>
-            </a>
-
-            <nav class="main-nav" id="main-navigation" aria-label="التنقل الرئيسي">
-                <ul class="nav-links">
-                    <li><a href="#home" class="active">الرئيسية</a></li>
-                    <li><a href="#about">من نحن</a></li>
-                    <li><a href="#services">الخدمات</a></li>
-                    <li><a href="#projects">مشاريعنا</a></li>
-                    <li><a href="#contact">الاتصال</a></li>
-                </ul>
-            </nav>
-
-            <a href="#contact" class="btn btn-outline btn-sm nav-cta">طلب استشارة</a>
-
-            <button type="button" class="menu-toggle" id="menu-toggle" aria-label="فتح وإغلاق القائمة"
-                aria-expanded="false" aria-controls="main-navigation">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-        </div>
-    </header>
 
     <!-- Hero Enterprise Section -->
     <main id="main-content">
@@ -190,7 +191,6 @@
                         <div class="img-frame img-main">
                             <img src="wallbar.jpg" alt="عمليات الشركة والتصنيع">
                         </div>
-                        <div class="pattern-dots"></div>
                         <div class="experience-card">
                             <i class="fas fa-handshake" aria-hidden="true"></i>
                             <div class="exp-text">
@@ -233,7 +233,7 @@
                     </div>
                     <div class="block-content">
                         <h3>الإدارة البيئية والمخلفات</h3>
-                        <p>التخلص الآمن وإعادة تدوير المخلفات (الصناعية، الصلبة، والسائلة) والإلكترونية والإعدامات طبقا
+                        <p>التخلص الآمن وإعادة تدوير المخلفات (الصناعية، الصلبة، والسائلة) والإلكترونية والإعدامات طبقاً
                             لاشتراطات وزارة البيئة.</p>
                     </div>
                     <div class="block-hover"></div>
@@ -280,7 +280,7 @@
     </section>
 
     <!-- Extended CTA -->
-    <section class="cta-banner">
+    <section class="cta-banner" aria-label="دعوة للتواصل">
         <div class="container">
             <div class="cta-inner fade-up">
                 <div class="cta-text">
@@ -299,16 +299,16 @@
         <div class="container">
             <div class="footer-widgets">
                 <div class="widget col-about">
-                    <img src="logo.jpg" alt="Alfakhr Logo" class="footer-brand">
+                    <img src="logo.jpg" alt="شعار مجموعة الفخر" class="footer-brand" width="65" height="65">
                     <p class="widget-desc">
                         الفخر للخدمات البترولية والمقاولات، شركة مساهمة تضع معايير الجودة والاستدامة فوق كل اعتبار
                         لتلبية احتياجات السوق المصري المتقدمة.
                     </p>
                     <div class="widget-social">
-                        <a href="https://www.facebook.com/www.AlfakhrGroup" target="_blank" title="Facebook"><i
-                                class="fab fa-facebook-f"></i></a>
-                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/www.AlfakhrGroup" target="_blank" rel="noopener noreferrer"
+                            aria-label="فيسبوك"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="لينكد إن (قريباً)"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="#" aria-label="تويتر (قريباً)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
                     </div>
                 </div>
 

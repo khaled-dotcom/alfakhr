@@ -62,106 +62,131 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* --- 1. Sticky Navbar & Header Shadow --- */
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 30) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
 
     /* --- 2. Mobile Menu Toggle --- */
     const mobileToggle = document.getElementById('menu-toggle');
     const mainNav = document.querySelector('.main-nav');
 
-    mobileToggle.addEventListener('click', () => {
-        const open = mainNav.classList.toggle('menu-open');
-        mobileToggle.classList.toggle('is-open', open);
-        mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
+    const closeMobileMenu = () => {
+        if (!mainNav || !mobileToggle) return;
+        mainNav.classList.remove('menu-open');
+        mobileToggle.classList.remove('is-open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+    };
 
-    // Close menu on link click
-    document.querySelectorAll('.main-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-            mainNav.classList.remove('menu-open');
-            mobileToggle.classList.remove('is-open');
-            mobileToggle.setAttribute('aria-expanded', 'false');
+    if (mobileToggle && mainNav) {
+        mobileToggle.addEventListener('click', () => {
+            const open = mainNav.classList.toggle('menu-open');
+            mobileToggle.classList.toggle('is-open', open);
+            mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
-    });
 
-    /* --- 3. Advanced Scroll Reveal Observer --- */
+        document.querySelectorAll('.main-nav a').forEach((link) => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+    }
+
+    /* --- 3. Scroll Reveal --- */
     const revealElements = document.querySelectorAll('.fade-up, .reveal-right, .reveal-left');
 
     const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('in-view');
-                observer.unobserve(entry.target); // Run once
+                observer.unobserve(entry.target);
             }
         });
     }, {
         root: null,
         threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
+        rootMargin: '0px 0px -50px 0px'
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach((el) => revealObserver.observe(el));
 
-    /* --- 4. Counter Animation for Stats --- */
+    /* --- 4. Stats Counter --- */
     const statNumbers = document.querySelectorAll('.stat-num');
     let counted = false;
 
     const runCounter = () => {
-        statNumbers.forEach(num => {
-            const updateCount = () => {
-                const target = +num.getAttribute('data-target');
-                const count = +num.innerText;
+        statNumbers.forEach((num) => {
+            const target = parseInt(num.getAttribute('data-target'), 10);
+            if (Number.isNaN(target)) return;
+            num.textContent = '0';
 
-                // Calculate increment speed based on target
-                const inc = target / 40;
-
+            const tick = () => {
+                const count = parseInt(num.textContent, 10) || 0;
+                const inc = Math.max(1, Math.ceil(target / 40));
                 if (count < target) {
-                    num.innerText = Math.ceil(count + inc);
-                    setTimeout(updateCount, 40);
+                    num.textContent = String(Math.min(count + inc, target));
+                    window.setTimeout(tick, 40);
                 } else {
-                    num.innerText = target;
+                    num.textContent = String(target);
                 }
             };
-            updateCount();
+            tick();
         });
     };
 
     const statsSection = document.querySelector('.stats-bar');
-    if (statsSection) {
+    if (statsSection && statNumbers.length) {
         const statsObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && !counted) {
-                runCounter();
-                counted = true;
-            }
-        }, { threshold: 0.5 });
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && !counted) {
+                    counted = true;
+                    runCounter();
+                }
+            });
+        }, { threshold: 0.35 });
 
         statsObserver.observe(statsSection);
     }
 
-    /* --- 5. Active Link Underline Update --- */
-    const sections = document.querySelectorAll('section');
+    /* --- 5. Active nav: أقسام بمعرّف + تذييل الاتصال (بدون includes الفارغ) --- */
+    const spyTargets = document.querySelectorAll('section[id], footer[id]');
     const navLinks = document.querySelectorAll('.nav-links a');
 
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - sectionHeight / 4)) {
-                current = section.getAttribute('id');
+    const updateActiveNav = () => {
+        const y = window.scrollY + 140;
+        let currentId = '';
+
+        spyTargets.forEach((el) => {
+            const id = el.getAttribute('id');
+            if (!id) return;
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            if (y >= top - 90) {
+                currentId = id;
             }
         });
 
-        navLinks.forEach(link => {
+        navLinks.forEach((link) => {
             link.classList.remove('active');
-            if (link.getAttribute('href').includes(current)) {
+            const href = link.getAttribute('href');
+            if (currentId && href === `#${currentId}`) {
                 link.classList.add('active');
             }
         });
-    });
+    };
+
+    const onScroll = () => {
+        if (navbar) {
+            if (window.scrollY > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+        updateActiveNav();
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
 });
