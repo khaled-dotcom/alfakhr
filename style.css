@@ -57,6 +57,10 @@
     --radius-sm: 3px;
     --radius-md: 6px;
     --preloader-z: 20000;
+
+    /* شعار الهيدر: أبعاد ثابتة (لا تتصغّر مع الشاشة) */
+    --brand-logo-box: 52px;
+    --brand-logo-box-mobile: 48px;
 }
 
 /* 2. Resets & Base Configuration */
@@ -168,6 +172,10 @@ button:focus-visible,
     width: 120px;
     height: 120px;
     margin: 0 auto 1.75rem;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: var(--radius-md);
 }
 
 .preloader__logo-ring {
@@ -183,7 +191,9 @@ button:focus-visible,
     z-index: 1;
     width: 120px;
     height: 120px;
-    object-fit: cover;
+    max-width: none;
+    object-fit: contain;
+    object-position: center;
     border-radius: var(--radius-md);
     border: 1px solid rgba(var(--c-primary-rgb), 0.4);
     box-shadow:
@@ -479,6 +489,7 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.75rem;
     height: 90px;
     transition: height var(--trans-base);
 }
@@ -490,15 +501,31 @@ img {
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.85rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.brand-img-wrap {
+    flex: 0 0 auto;
+    width: var(--brand-logo-box);
+    height: var(--brand-logo-box);
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(var(--c-primary-rgb), 0.35);
 }
 
 .brand-img-wrap img {
-    height: 55px;
-    width: 55px;
-    border-radius: var(--radius-sm);
-    object-fit: cover;
-    border: 1px solid rgba(var(--c-primary-rgb), 0.38);
+    width: var(--brand-logo-box);
+    height: var(--brand-logo-box);
+    max-width: none;
+    border-radius: calc(var(--radius-sm) - 1px);
+    object-fit: contain;
+    object-position: center;
+    border: none;
 }
 
 .brand-text {
@@ -563,6 +590,7 @@ img {
     justify-content: space-between;
     width: 30px;
     height: 21px;
+    flex-shrink: 0;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -751,6 +779,7 @@ img {
     font-weight: 800;
     color: var(--c-text-h);
     line-height: 1;
+    font-variant-numeric: tabular-nums;
 }
 
 .plus {
@@ -1003,9 +1032,13 @@ img {
 .footer-brand {
     width: 65px;
     height: 65px;
+    max-width: none;
+    object-fit: contain;
+    object-position: center;
     border-radius: 8px;
     border: 2px solid var(--c-primary);
     margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .widget-desc {
@@ -1195,8 +1228,10 @@ img {
     :root {
         /* ارتفاع الشريط العلوي = منطقة النوتش + صف واحد للاتصال */
         --mobile-topbar-height: calc(env(safe-area-inset-top, 0px) + 2.5rem);
+        /* تعويض الهيرو: يغطي الشريط + أقصى ارتفاع متوقع للهيدر */
         --mobile-navbar-height: 72px;
         --mobile-header-offset: calc(var(--mobile-topbar-height) + var(--mobile-navbar-height));
+        --brand-logo-box: var(--brand-logo-box-mobile);
     }
 
     html {
@@ -1266,34 +1301,97 @@ img {
     }
 
     .nav-container {
-        height: var(--mobile-navbar-height);
+        min-height: 56px;
+        height: auto;
+        padding: 0.35rem 0;
+        box-sizing: border-box;
     }
 
+    /* ارتفاع الهيدر ثابت تقريبياً على الموبايل — لا قفز للشعار */
     .navbar.scrolled .nav-container {
-        height: 62px;
+        min-height: 56px;
+        height: auto;
+        padding: 0.35rem 0;
+    }
+
+    .navbar.scrolled {
+        padding: 0;
     }
 
     .brand-title {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
+        line-height: 1.25;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
     .brand-subtitle {
-        font-size: 0.65rem;
-        line-height: 1.35;
+        font-size: 0.62rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
+    .brand-img-wrap,
     .brand-img-wrap img {
-        height: 44px;
-        width: 44px;
+        width: var(--brand-logo-box-mobile);
+        height: var(--brand-logo-box-mobile);
     }
 
     .brand-logo {
-        gap: 0.65rem;
-        min-width: 0;
+        gap: 0.5rem;
     }
 
     .brand-text {
         min-width: 0;
+    }
+
+    .scroll-indicator {
+        display: none;
+    }
+
+    .stat-item {
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.75rem 1.25rem;
+    }
+
+    .stat-num,
+    .plus {
+        font-size: clamp(1.85rem, 8vw, 2.35rem);
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+    }
+
+    .stat-info {
+        min-width: 0;
+        text-align: center;
+        align-items: center;
+    }
+
+    .preloader__logo-shell,
+    .preloader__logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .preloader__logo-ring {
+        animation: none;
+        opacity: 0.65;
+        transform: none;
+    }
+
+    .preloader__logo {
+        animation: none;
+        opacity: 1;
+        transform: none;
+        filter: none;
     }
 
     .hero {
