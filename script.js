@@ -1,3 +1,63 @@
+(function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const fill = document.getElementById('preloader-fill');
+    const bar = document.getElementById('preloader-bar');
+    if (!preloader || !fill) return;
+
+    const body = document.body;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const minDisplayMs = reduceMotion ? 0 : 1050;
+    const startedAt = performance.now();
+    let progressTimer;
+
+    function setProgress(percent) {
+        const v = Math.min(100, Math.max(0, percent));
+        fill.style.width = `${v}%`;
+        if (bar) bar.setAttribute('aria-valuenow', String(Math.round(v)));
+    }
+
+    if (!reduceMotion) {
+        let simulated = 4;
+        setProgress(simulated);
+        progressTimer = window.setInterval(() => {
+            if (simulated >= 80) return;
+            simulated += 4 + Math.random() * 9;
+            setProgress(Math.min(simulated, 80));
+        }, 140);
+    } else {
+        setProgress(100);
+    }
+
+    function dismiss() {
+        if (progressTimer) window.clearInterval(progressTimer);
+        setProgress(100);
+        body.classList.remove('is-loading');
+        preloader.classList.add('preloader--done');
+        preloader.setAttribute('aria-busy', 'false');
+
+        const backupRemove = window.setTimeout(() => {
+            if (preloader.parentNode) preloader.remove();
+        }, 2500);
+
+        const onTransitionEnd = (e) => {
+            if (e.target !== preloader || e.propertyName !== 'opacity') return;
+            window.clearTimeout(backupRemove);
+            preloader.remove();
+            preloader.removeEventListener('transitionend', onTransitionEnd);
+        };
+        preloader.addEventListener('transitionend', onTransitionEnd);
+    }
+
+    window.addEventListener(
+        'load',
+        () => {
+            const elapsed = performance.now() - startedAt;
+            window.setTimeout(dismiss, Math.max(0, minDisplayMs - elapsed));
+        },
+        { once: true }
+    );
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
     /* --- 1. Sticky Navbar & Header Shadow --- */
@@ -15,14 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainNav = document.querySelector('.main-nav');
 
     mobileToggle.addEventListener('click', () => {
-        mainNav.classList.toggle('menu-open');
-        // Simple animation logic for lines could be added here
+        const open = mainNav.classList.toggle('menu-open');
+        mobileToggle.classList.toggle('is-open', open);
+        mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
     // Close menu on link click
     document.querySelectorAll('.main-nav a').forEach(link => {
         link.addEventListener('click', () => {
             mainNav.classList.remove('menu-open');
+            mobileToggle.classList.remove('is-open');
+            mobileToggle.setAttribute('aria-expanded', 'false');
         });
     });
 

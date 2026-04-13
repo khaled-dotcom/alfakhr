@@ -7,6 +7,7 @@
     <meta name="description"
         content="مجموعة الفخر - شركة مساهمة رائدة في مجالات المقاولات، الخدمات البترولية، الخدمات البيئية، والتخلص الآمن من المخلفات والإعدامات.">
     <title>مجموعة الفخر | للخدمات البترولية والمقاولات</title>
+    <meta name="theme-color" content="#020c16">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,10 +19,30 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <link rel="preload" href="logo.jpg" as="image">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="dark-theme">
+<body class="dark-theme is-loading">
+
+    <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+    <!-- Intro loader -->
+    <div class="preloader" id="preloader" aria-busy="true" aria-live="polite">
+        <div class="preloader__grid" aria-hidden="true"></div>
+        <div class="preloader__panel">
+            <div class="preloader__logo-shell">
+                <div class="preloader__logo-ring" aria-hidden="true"></div>
+                <img src="logo.jpg" alt="" class="preloader__logo" width="120" height="120" decoding="async">
+            </div>
+            <p class="preloader__title">مجموعة الفخر</p>
+            <p class="preloader__line">شركة مساهمة · الخدمات البترولية والمقاولات</p>
+            <div class="preloader__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="preloader-bar">
+                <span class="preloader__fill" id="preloader-fill"></span>
+            </div>
+        </div>
+    </div>
 
     <!-- Top Bar -->
     <div class="topbar">
@@ -50,11 +71,11 @@
                 </div>
                 <div class="brand-text">
                     <h1 class="brand-title">الفخر جروب</h1>
-                    <span class="brand-subtitle">للخدمات البترولية والبيئية و الصناعية</span>
+                    <span class="brand-subtitle">للخدمات البترولية والبيئية والصناعية</span>
                 </div>
             </a>
 
-            <nav class="main-nav">
+            <nav class="main-nav" id="main-navigation" aria-label="التنقل الرئيسي">
                 <ul class="nav-links">
                     <li><a href="#home" class="active">الرئيسية</a></li>
                     <li><a href="#about">من نحن</a></li>
@@ -66,7 +87,8 @@
 
             <a href="#contact" class="btn btn-outline btn-sm nav-cta">طلب استشارة</a>
 
-            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+            <button type="button" class="menu-toggle" id="menu-toggle" aria-label="فتح وإغلاق القائمة"
+                aria-expanded="false" aria-controls="main-navigation">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -75,6 +97,7 @@
     </header>
 
     <!-- Hero Enterprise Section -->
+    <main id="main-content">
     <section class="hero" id="home">
         <div class="hero-bg"></div>
         <div class="container relative">
@@ -169,10 +192,10 @@
                         </div>
                         <div class="pattern-dots"></div>
                         <div class="experience-card">
-                            <i class="fas fa-award"></i>
+                            <i class="fas fa-handshake" aria-hidden="true"></i>
                             <div class="exp-text">
-                                <strong>ISO 9001</strong>
-                                <span>جودة معتمدة</span>
+                                <strong>شراكات موثوقة</strong>
+                                <span>قطاعات حكومية وخاصة</span>
                             </div>
                         </div>
                     </div>
@@ -242,6 +265,17 @@
                     <div class="block-hover"></div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="projects-band section-spacing" id="projects" aria-labelledby="projects-heading">
+        <div class="container">
+            <header class="section-heading text-center fade-up">
+                <span class="section-subtitle">خبرة ميدانية</span>
+                <h2 id="projects-heading" class="section-title">مشاريعنا</h2>
+                <p class="section-lead">ننفّذ مشاريع المقاولات والخدمات البترولية والبيئية على مستوى الجمهورية، بمعايير
+                    الجودة والسلامة والالتزام التعاقدي.</p>
+            </header>
         </div>
     </section>
 
@@ -327,6 +361,7 @@
             </div>
         </div>
     </footer>
+    </main>
 
     <script src="script.js"></script>
 </body>
